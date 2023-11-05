@@ -11,10 +11,10 @@ DTS = DecisionTreeClassifier(max_depth=5, random_state=0)
 DTS.fit(trainToX, trainToY)
 
 trainAcurracyDTS_Porcentual, testAcurracyDTS_Porcentual, acurracy_DTS, yTestPredictDTS = porcentajesAcierto(
-    DTS)
+    DTS, x, y, trainToX, testToX, trainToY, testToY)
 
 
-print("La presición promedio del DTS fue: ", acurracy_DTS, "%")
+print("La Score Cross-Validation del DTS fue: ", acurracy_DTS, "%")
 print("La presición en train del DTS fue: ", trainAcurracyDTS_Porcentual, "%")
 print("La presición en test del DTS fue: ", testAcurracyDTS_Porcentual, "%")
 

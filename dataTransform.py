@@ -8,11 +8,15 @@ from sklearn.model_selection import cross_val_score
 
 def cleanData():
     data = pd.read_csv(Types.NAME_FILE_DATA, sep=Types.SEPARATION_FILE_DATA)
-    # Eliminamos valores que no tengan relevancia
+
     data.drop(Types.USELESS_COLUMS, axis="columns", inplace=True)
 
-    # Eliminamos valores en blanco
-    data = data.dropna()
+    for col in data:
+        if data[col].isnull().any():
+            if data[col].dtype.name == "object":
+                data[col] = data[col].fillna(data[col].mode())
+            else:
+                data[col] = data[col].fillna(data[col].mean())
 
     data = pd.get_dummies(
         data, columns=Types.COLUMNS_TO_TRANSFORM, drop_first=True)
@@ -31,9 +35,7 @@ def selection_testAndQuality(data):
     return x, y, trainToX, testToX, trainToY, testToY
 
 
-def porcentajesAcierto(IA):
-    data = cleanData()
-    x, y, trainToX, testToX, trainToY, testToY = selection_testAndQuality(data)
+def porcentajesAcierto(IA, x, y, trainToX, testToX, trainToY, testToY):
     yTrainPredictMLP = IA.predict(trainToX)
     yTestPredictIA = IA.predict(testToX)
 
