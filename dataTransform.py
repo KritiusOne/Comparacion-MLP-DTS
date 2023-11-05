@@ -35,14 +35,14 @@ def porcentajesAcierto(IA):
     data = cleanData()
     x, y, trainToX, testToX, trainToY, testToY = selection_testAndQuality(data)
     yTrainPredictMLP = IA.predict(trainToX)
-    yTestPredictMLP = IA.predict(testToX)
+    yTestPredictIA = IA.predict(testToX)
 
     trainAcurracyIA = accuracy_score(trainToY, yTrainPredictMLP)
     trainAcurracyIA_Porcentual = round(trainAcurracyIA, 8) * 100
-    testAcurracyIA = accuracy_score(testToY, yTestPredictMLP)
+    testAcurracyIA = accuracy_score(testToY, yTestPredictIA)
     testAcurracyIA_Porcentual = round(testAcurracyIA, 8) * 100
 
     score_IA = cross_val_score(IA, x, y, cv=5)
     acurracy_IA = np.mean(score_IA)
 
-    return trainAcurracyIA_Porcentual, testAcurracyIA_Porcentual, round(acurracy_IA, 8) * 100
+    return trainAcurracyIA_Porcentual, testAcurracyIA_Porcentual, round(acurracy_IA, 8) * 100, yTestPredictIA
