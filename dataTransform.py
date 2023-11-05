@@ -1,33 +1,29 @@
 import pandas as pd
 import category_encoders as ce
 from sklearn.model_selection import train_test_split
+import Types
 
 
 def cleanData():
-    data = pd.read_csv("Metabolic Syndrome.csv", sep=",")
+    data = pd.read_csv(Types.NAME_FILE_DATA, sep=Types.SEPARATION_FILE_DATA)
     # Eliminamos valores que no tengan relevancia
-    data.drop(["seqn"], axis="columns", inplace=True)
-    print(data.shape)
+    data.drop(Types.USELESS_COLUMS, axis="columns", inplace=True)
+
+    # Eliminamos valores en blanco
     data = data.dropna()
-    print(data.shape)
 
-    # Para este caso, transformamos Sex, Marital y Race, me queda pendiente eliminar los magic strings
-    # print(data.Sex[1]) -> esto es posible y valido
     data = pd.get_dummies(
-        data, columns=["Sex", "Race", "Marital"], drop_first=True)
-    coder = ce.OrdinalEncoder(cols=["Sex_Male"])
-    data = coder.fit_transform(data)
-    for col in data.filter(like="Race"):
-        data[col] = data[col].astype(int)
-    for col in data.filter(like="Marital"):
-        data[col] = data[col].astype(int)
+        data, columns=Types.COLUMNS_TO_TRANSFORM, drop_first=True)
 
+    for i in Types.COLUMNS_TO_TRANSFORM:
+        for col in data.filter(like=i):
+            data[col] = data[col].astype(int)
     return data
 
 
 def selection_testAndQuality(data):
-    x = data.drop(["MetabolicSyndrome"], axis=1)
-    y = data.MetabolicSyndrome
+    x = data.drop(Types.COLUMN_GOAL_ARR, axis=1)
+    y = data[Types.COLUMN_GOAL]
     trainToX, testToX, trainToY, testToY = train_test_split(
         x, y, test_size=0.2, random_state=00000)
     return x, y, trainToX, testToX, trainToY, testToY
