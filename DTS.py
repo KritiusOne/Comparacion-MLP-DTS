@@ -1,14 +1,18 @@
 from dataTransform import cleanData
 from dataTransform import selection_testAndQuality
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.model_selection import cross_val_score
-import numpy as np
+from dataTransform import porcentajesAcierto
 
 data = cleanData()
 x, y, trainToX, testToX, trainToY, testToY = selection_testAndQuality(data)
 
 DTS = DecisionTreeClassifier(max_depth=5, random_state=0)
-score_DTS = cross_val_score(DTS, x, y, cv=5)
-acurracy_DTS = round(np.mean(score_DTS), 8) * 100
+DTS.fit(trainToX, trainToY)
+
+trainAcurracyDTS_Porcentual, testAcurracyDTS_Porcentual, acurracy_DTS = porcentajesAcierto(
+    DTS)
+
 
 print("La presición promedio del DTS fue: ", acurracy_DTS, "%")
+print("La presición en train del DTS fue: ", trainAcurracyDTS_Porcentual, "%")
+print("La presición en test del DTS fue: ", testAcurracyDTS_Porcentual, "%")

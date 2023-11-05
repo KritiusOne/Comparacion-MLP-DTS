@@ -1,7 +1,9 @@
 import pandas as pd
-import category_encoders as ce
 from sklearn.model_selection import train_test_split
 import Types
+from sklearn.metrics import accuracy_score
+import numpy as np
+from sklearn.model_selection import cross_val_score
 
 
 def cleanData():
@@ -27,3 +29,20 @@ def selection_testAndQuality(data):
     trainToX, testToX, trainToY, testToY = train_test_split(
         x, y, test_size=0.2, random_state=00000)
     return x, y, trainToX, testToX, trainToY, testToY
+
+
+def porcentajesAcierto(IA):
+    data = cleanData()
+    x, y, trainToX, testToX, trainToY, testToY = selection_testAndQuality(data)
+    yTrainPredictMLP = IA.predict(trainToX)
+    yTestPredictMLP = IA.predict(testToX)
+
+    trainAcurracyIA = accuracy_score(trainToY, yTrainPredictMLP)
+    trainAcurracyIA_Porcentual = round(trainAcurracyIA, 8) * 100
+    testAcurracyIA = accuracy_score(testToY, yTestPredictMLP)
+    testAcurracyIA_Porcentual = round(testAcurracyIA, 8) * 100
+
+    score_IA = cross_val_score(IA, x, y, cv=5)
+    acurracy_IA = np.mean(score_IA)
+
+    return trainAcurracyIA_Porcentual, testAcurracyIA_Porcentual, round(acurracy_IA, 8) * 100

@@ -1,16 +1,19 @@
-from sklearn.model_selection import cross_val_score
 from dataTransform import cleanData
-from dataTransform import selection_testAndQuality
+from dataTransform import porcentajesAcierto
 from sklearn.neural_network import MLPClassifier
-import numpy as np
+from dataTransform import selection_testAndQuality
 
 data = cleanData()
 x, y, trainToX, testToX, trainToY, testToY = selection_testAndQuality(data)
 MLP = MLPClassifier(hidden_layer_sizes=(10, 8, 6, 3),
                     activation="relu", solver="adam", max_iter=1500)
 
-cv_score_mlp = cross_val_score(MLP, x, y, cv=5)
+MLP.fit(trainToX, trainToY)
 
-cv_acurracy_mlp = np.mean(cv_score_mlp)
+trainAcurracyMLP_Porcentual, testAcurracyMLP_Porcentual, acurracy_MLP = porcentajesAcierto(
+    MLP)
+
 print("El acierto promedio del Multy Layer Perceptron es: ",
-      round(cv_acurracy_mlp, 5) * 100, "%")
+      acurracy_MLP, 8, "%")
+print("La presición en train del MLP fue: ", trainAcurracyMLP_Porcentual, "%")
+print("La presición en test del MLP fue: ", testAcurracyMLP_Porcentual, "%")
