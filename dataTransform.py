@@ -1,5 +1,6 @@
 import pandas as pd
 import category_encoders as ce
+from sklearn.model_selection import train_test_split
 
 
 def cleanData():
@@ -22,3 +23,11 @@ def cleanData():
         data[col] = data[col].astype(int)
 
     return data
+
+
+def selection_testAndQuality(data):
+    x = data.drop(["MetabolicSyndrome"], axis=1)
+    y = data.MetabolicSyndrome
+    trainToX, testToX, trainToY, testToY = train_test_split(
+        x, y, test_size=0.2, random_state=00000)
+    return x, y, trainToX, testToX, trainToY, testToY
