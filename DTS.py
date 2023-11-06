@@ -7,7 +7,7 @@ from MatrizConf import MatrizConf
 data = cleanData()
 x, y, trainToX, testToX, trainToY, testToY = selection_testAndQuality(data)
 
-DTS = DecisionTreeClassifier(max_depth=5, random_state=0)
+DTS = DecisionTreeClassifier(max_depth=5, random_state=20)
 DTS.fit(trainToX, trainToY)
 
 trainAcurracyDTS_Porcentual, testAcurracyDTS_Porcentual, acurracy_DTS, yTestPredictDTS = porcentajesAcierto(
